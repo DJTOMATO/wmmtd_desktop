@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Wangan Minimum Tune</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e1013;
+      --surface: #16191e;
+      --line: #272c33;
+      --text: #f2f4f8;
+      --muted: #9aa3ae;
+      --accent: #ff5722;
+      --accent-hover: #ff7043;
+      --danger: #ef4444;
+      --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at 50% -15%, rgba(255, 87, 34, 0.22) 0%, rgba(22, 25, 30, 0.7) 42%, var(--bg) 100%) fixed var(--bg);
+      color: var(--text);
+      font: 15px/1.55 var(--sans);
+      overflow: hidden;
+      user-select: none;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      gap: 18px;
+      position: relative;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 5px;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(255, 87, 34, 0.65);
+    }
+
+    .brand {
+      font: 700 15px/1 var(--sans);
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1 {
+      margin: 0;
+      font: 700 clamp(30px, 5vw, 52px)/1.08 var(--sans);
+      letter-spacing: 0.02em;
+      color: #ffffff;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .pill {
+      padding: 4px 12px;
+      font: 600 11px/1.3 var(--sans);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #d6dbe2;
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 2px solid var(--accent);
+      border-radius: 2px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    .dot.err {
+      background: var(--danger);
+      box-shadow: 0 0 10px var(--danger);
+      animation: none;
+    }
+
+    @keyframes pulse {
+      50% {
+        opacity: 0.35;
+      }
+    }
+
+    button {
+      margin-top: 6px;
+      padding: 11px 28px;
+      font: 700 13px var(--sans);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 4px 16px rgba(255, 87, 34, 0.35);
+      transform: translateY(-1px);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="brand">Wangan</div>
+  <h1>Minimum Tune</h1>
+  <div class="pills">
+    <span class="pill">Solo</span>
+    <span class="pill">Ghost Battles</span>
+    <span class="pill">Online Versus</span>
+  </div>
+  <div class="status">
+    <span class="dot" id="dot"></span>
+    <span id="msg">Connecting to wmmtd.xyz…</span>
+  </div>
+  <button type="button" id="retry" hidden>Retry Connection</button>
+
+  <script>
+    const DEFAULT_URL = 'https://wmmtd.xyz/';
+    const params = new URLSearchParams(window.location.search);
+    const isError = params.get('error') === '1';
+    const requestedTarget = params.get('target');
+    const targetUrl = requestedTarget && requestedTarget.startsWith('https://') ? requestedTarget : DEFAULT_URL;
+
+    const dot = document.getElementById('dot');
+    const msg = document.getElementById('msg');
+    const retryBtn = document.getElementById('retry');
+
+    function connect() {
+      dot.className = 'dot';
+      msg.textContent = 'Connecting to Wangan Minimum Tune…';
+      retryBtn.hidden = true;
+      if (window.electronAPI && window.electronAPI.loadSite) {
+        window.electronAPI.loadSite(targetUrl);
+      } else {
+        window.location.href = targetUrl;
+      }
+    }
+
+    retryBtn.addEventListener('click', connect);
+
+    if (isError) {
+      dot.className = 'dot err';
+      msg.textContent = 'Could not reach wmmtd.xyz. Check your internet connection.';
+      retryBtn.hidden = false;
+    } else {
+      connect();
+    }
+  </script>
+</body>
+
+</html>

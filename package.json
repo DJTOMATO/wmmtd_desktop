@@ -1,0 +1,102 @@
+{
+  "name": "wmmtd_desktop",
+  "productName": "Wangan Minimum Tune",
+  "version": "1.0.0",
+  "description": "Unofficial desktop client for Wangan Minimum Tune (wmmtd.xyz) — Wangan Midnight arcade street racing",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DJTOMATO/wmmtd_desktop.git"
+  },
+  "homepage": "https://github.com/DJTOMATO/wmmtd_desktop#readme",
+  "bugs": {
+    "url": "https://github.com/DJTOMATO/wmmtd_desktop/issues"
+  },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/lenabot"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win --x64 --publish never",
+    "build:win:arm64": "electron-builder --win --arm64 --publish never",
+    "build:mac": "electron-builder --mac --publish never",
+    "build:linux": "electron-builder --linux --publish never"
+  },
+  "keywords": [
+    "electron",
+    "wmmt",
+    "wmmtd",
+    "wangan-midnight",
+    "wangan-minimum-tune",
+    "arcade-racing",
+    "racing",
+    "webassembly",
+    "webgl2"
+  ],
+  "author": "Glas",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.glas.wmmtddesktop",
+    "productName": "Wangan Minimum Tune",
+    "npmRebuild": false,
+    "win": {
+      "target": [
+        {
+          "target": "nsis"
+        },
+        {
+          "target": "zip"
+        }
+      ],
+      "icon": "icon.ico",
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Wangan Minimum Tune",
+      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "icon.icns",
+      "category": "public.app-category.games",
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "icon.png",
+      "category": "Game",
+      "maintainer": "Glas <48269777+DJTOMATO@users.noreply.github.com>",
+      "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "wmmtdmod.js",
+      "index.html",
+      "node_modules/**/*",
+      "icon.ico",
+      "icon.png",
+      "icon.icns"
+    ]
+  },
+  "dependencies": {
+    "discord-rpc": "^4.0.1"
+  }
+}
